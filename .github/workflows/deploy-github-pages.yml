@@ -1,0 +1,36 @@
+name: deploy-github-pages
+on:
+  push:
+    branches:
+      - main
+jobs:
+  deploy:
+    permissions:
+      pages: write
+      id-token: write
+    runs-on: ubuntu-latest
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v3
+
+      - name: Setup Node
+        uses: actions/setup-node@v3
+        with:
+          node-version: '14'
+
+      - name: Install Dependencies
+        run: npm i
+
+      - name: Build
+        run: npm run build
+
+      - name: Uploading GitHub Pages Artifact
+        uses: actions/upload-pages-artifact@v1
+        with:
+          path: './dist'
+
+      - name: Deploy
+        uses: actions/deploy-pages@v1
