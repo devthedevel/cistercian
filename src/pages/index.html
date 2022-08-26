@@ -3,12 +3,18 @@
 
 <head>
     <meta charset="UTF-8" />
-    <title><%= htmlWebpackPlugin.options.title %></title>
+    <title>
+        <%= htmlWebpackPlugin.options.title %>
+    </title>
     <link rel="stylesheet" href="index.css">
 </head>
 
 <body>
     <script src="bundle.js"></script>
+    <h1 id="title">Cistercian Numbers</h1>
+    <div id="center-block">
+        <input id="number" type="text" minlength="0" maxlength="4" autofocus>
+    </div>
     <canvas id="canvas" />
 </body>
 

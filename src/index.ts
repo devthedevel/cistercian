@@ -1,60 +1,8 @@
 import './styles/index.css';
 
-const number: number[] = [];
-
 window.addEventListener('DOMContentLoaded', () => {
     main()
 })
-
-window.addEventListener('keydown', event => {
-    const code = event.code.toLowerCase();
-    if (code === 'backspace') {
-        if (number.length > 0) {
-            number.pop();
-        }
-    } else if (code === 'digit0' || code === 'numpad0') {
-        if (number.length > 0 && number.length < 4) {
-            number.push(0);
-        }
-    } else if (code === 'digit1' || code === 'numpad1') {
-        if (number.length < 4) {
-            number.push(1);
-        }
-    } else if (code === 'digit2' || code === 'numpad2') {
-        if (number.length < 4) {
-            number.push(2);
-        }
-    } else if (code === 'digit3' || code === 'numpad3') {
-        if (number.length < 4) {
-            number.push(3);
-        }
-    } else if (code === 'digit4' || code === 'numpad4') {
-        if (number.length < 4) {
-            number.push(4);
-        }
-    } else if (code === 'digit5' || code === 'numpad5') {
-        if (number.length < 4) {
-            number.push(5);
-        }
-    } else if (code === 'digit6' || code === 'numpad6') {
-        if (number.length < 4) {
-            number.push(6);
-        }
-    } else if (code === 'digit7' || code === 'numpad7') {
-        if (number.length < 4) {
-            number.push(7);
-        }
-    } else if (code === 'digit8' || code === 'numpad8') {
-        if (number.length < 4) {
-            number.push(8);
-        }
-    } else if (code === 'digit9' || code === 'numpad9') {
-        if (number.length < 4) {
-            number.push(9);
-        }
-    }
-    console.log(JSON.stringify(number))
-});
 
 function resize(canvas: HTMLCanvasElement) {
     canvas.width = document.body.clientWidth;
@@ -65,10 +13,21 @@ function main() {
     const canvas = document.getElementById('canvas') as HTMLCanvasElement;
     const ctx = canvas.getContext('2d') as CanvasRenderingContext2D;
 
+    //Setup input
+    let input: number[] = [];
+    const numberBox = document.getElementById('number') as HTMLInputElement;
+
+    numberBox.addEventListener('input', (event: Event) => {
+        const text = (event?.target as HTMLInputElement).value.replace(/[^0-9.]+[0]*/g, '') ?? '';
+        numberBox.value = text;
+
+        input = text.split('').map(num => Number(num))
+    });
+
     const loop = () => {
         resize(canvas);
 
-        draw(canvas, ctx);
+        draw(canvas, ctx, input);
 
         requestAnimationFrame(loop);
     }
@@ -83,7 +42,7 @@ const DIGITS = [
     {x: -1, y: -1}  //Thousand
 ];
 
-function draw(canvas: HTMLCanvasElement, ctx: CanvasRenderingContext2D) {
+function draw(canvas: HTMLCanvasElement, ctx: CanvasRenderingContext2D, input: number[]) {
     drawBackground(canvas, ctx);
 
     // Bounding box to bound glyphs
@@ -98,7 +57,7 @@ function draw(canvas: HTMLCanvasElement, ctx: CanvasRenderingContext2D) {
     }
 
     bbox.position.x += (canvas.width / 2) - bbox.width / 2;
-    bbox.position.y += (canvas.height / 2) - bbox.height / 2;
+    bbox.position.y += (canvas.height / 2) - bbox.height / 2 - 70;
 
     const half = {
         width: bbox.width / 2,
@@ -112,11 +71,7 @@ function draw(canvas: HTMLCanvasElement, ctx: CanvasRenderingContext2D) {
 
     // drawBbox(ctx, bbox);
 
-    drawTitleText(ctx, half, center);
-
-    if (number.length > 0) {
-        drawNumberText(ctx, half, center, number.join(''));
-
+    if (input.length > 0) {
         // Glyph style
         ctx.lineWidth = 20;
         ctx.strokeStyle = '#212121';
@@ -127,8 +82,8 @@ function draw(canvas: HTMLCanvasElement, ctx: CanvasRenderingContext2D) {
         drawCenterLine(ctx, half, center);
 
         let digitIdx = 0;
-        for (let i = number.length - 1; i >= 0; i--) {
-            const num = number[i];
+        for (let i = input.length - 1; i >= 0; i--) {
+            const num = input[i];
 
             if (num === 0) {
                 digitIdx++;
