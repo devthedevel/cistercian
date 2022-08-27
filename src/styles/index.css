@@ -6,6 +6,7 @@ html, body {
     overflow: hidden;
     display: block;
     background-color: #ECF0F1;
+    justify-content: start;
 }
 
 #title {
