@@ -1,20 +1,20 @@
 <!DOCTYPE html>
-<html>
+<html lang="en-US">
 
 <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1"/>
+    <link rel="icon" type="image/png" href="/favicon.png">
     <title>
-        <%= htmlWebpackPlugin.options.title %>
+        Cistercian | devthedevel.xyz
     </title>
-    <link rel="stylesheet" href="index.css">
 </head>
 
 <body>
-    <script src="bundle.js"></script>
+    <script type="module" src="/src/index.ts"></script>
     <h1 id="title">Cistercian Numbers</h1>
     <div id="center-block">
-        <input id="number" type="text" minlength="0" maxlength="4" autofocus>
+        <input id="number" type="text" minlength="0" maxlength="4">
     </div>
     <canvas id="canvas" />
 </body>
